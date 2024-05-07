@@ -1,6 +1,6 @@
-module ParSPROMETHEE
+# module ParSPROMETHEE
+
+using CUDA, Random
 
 
-
-
-end
+# end

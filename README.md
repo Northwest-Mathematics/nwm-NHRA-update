@@ -17,7 +17,7 @@ The framework also can be used to define certain scores on each alternative, for
 
 ### Inputs
 - the set of alternatives (raster cells) $x_k$
-- the set of criteria be functions $g_j$ defined on the $x_k$
+- the set of criteria functions $g_j$ defined on the $x_k$
 - DM weightings of each criteria $w_j$ (where $\sum w_j = 1$)
 ### Parameters
 - Parametric preference functions $F_j:\mathbb R \to [0,1]$ for each criterion
