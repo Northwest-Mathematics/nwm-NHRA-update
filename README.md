@@ -67,3 +67,5 @@ $$\Phi_j(x_i)  = \Phi_j^+(x_i)  - \Phi_j^-(x_i) $$
 We then of course have 
 $$\Phi(x_i) = \sum_j w_j \Phi_j(x_i),$$
 which the authors say gives a useful way of visualizing the various scores for alternatives viewed as layered raster grids.
+
+# Implementation Details
