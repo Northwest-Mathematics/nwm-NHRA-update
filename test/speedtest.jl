@@ -1,19 +1,19 @@
  include("kernels.jl")
 
 # simple RELU
-function F(x)
+function F(x::Float32)::Float32
     if x <= 0 
-        return 0
-    elseif x < 1
+        return 0.0f0
+    elseif x < 1.0f0
         return x
     else
-        return 1
+        return 1.0f0
     end
 end
 
 function speedtestnaive(Nx, Nj)
-    x = rand(Nx, Nj)
-    d = zeros(Nx, Nj)
+    x = rand(Float32, Nx, Nj)
+    d = zeros(Float32, Nx, Nj)
 
     # weights
     w = Float64.(rand(1:5, Nj))
@@ -47,11 +47,11 @@ end
 # Nj = number of criteria
 
 function speedtest2D(Nx, Nj)
-    x = rand(Nx, Nj)
-    d = zeros(Nx, Nj)
+    x = rand(Float32, Nx, Nj)
+    d = zeros(Float32, Nx, Nj)
 
     # weights
-    w = Float64.(rand(1:5, Nj))
+    w = Float32.(rand(1:5, Nj))
     w ./= sum(w)   
 
     xgpu = CuArray(x)
@@ -60,8 +60,8 @@ function speedtest2D(Nx, Nj)
 
     kernel = @cuda launch=false pairwisecompare2D(xgpu, Φ⁺gpu, Φ⁻gpu, 1, Nx, 16)
 
-    threadsᵢ = 16
-    threadsⱼ = 32
+    threadsᵢ = 1
+    threadsⱼ = 512
     threads = (threadsᵢ, threadsⱼ)
     blocks_i = cld(Nx, threadsᵢ)
     blocks_j = cld(Nx, threadsⱼ)
@@ -71,7 +71,7 @@ function speedtest2D(Nx, Nj)
             CUDA.@sync begin
                 kernel(xgpu, Φ⁺gpu, Φ⁻gpu, J, Nx, threadsⱼ;
                     threads=threads, blocks=blocks, shmem =
-                    (threadsⱼ * sizeof(Float64)))
+                    (threadsⱼ * sizeof(Float32)))
             end
         end
     end
@@ -83,5 +83,5 @@ function speedtest2D(Nx, Nj)
 
 end
 
-Φ⁺,Φ⁻ = speedtest2D(4 * (2000),30);
-Φ⁺,Φ⁻ = speedtestnaive(254806 , 2);
+Φ⁺,Φ⁻ = speedtest2D(4 * (40000), 1);
+Φ⁺,Φ⁻ = speedtestnaive(4 * (254806) , 3);

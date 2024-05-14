@@ -5,11 +5,12 @@ function pairwisecomparenaive(xgpu, Φ⁺gpu, Φ⁻gpu, Nj, Nx)
 
     for i = index:stride:Nx
         for J = 1:Nj
-            y⁺ = 0;
-            y⁻ = 0;
+            y⁺ = 0.0f0;
+            y⁻ = 0.0f0;
             for j = 1:Nx
-                y⁺ += F(xgpu[i, J] - xgpu[j, J]);
-                y⁻ += F(xgpu[j, J] - xgpu[i, J]);
+                d = xgpu[i, J] - xgpu[j, J]
+                y⁺ += F(d);
+                y⁻ += F(-d);
             end
 
             y⁺ /= (Nx - 1);
@@ -40,18 +41,19 @@ function pairwisecompare2D(xgpu, Φ⁺gpu, Φ⁻gpu, J, Nx, threadsⱼ)
     indexⱼ = (blockIdx().y - 1) * blockDim().y + threadIdx().y
     strideⱼ = gridDim().y * blockDim().y
 
-    S⁺ = @cuDynamicSharedMem(Float64, threadsⱼ)
-    S⁻ = @cuDynamicSharedMem(Float64, threadsⱼ)
+    S⁺ = @cuDynamicSharedMem(Float32, threadsⱼ)
+    S⁻ = @cuDynamicSharedMem(Float32, threadsⱼ)
     local_id = threadIdx().y
     global_index = threadIdx().y
 
     # for i = indexᵢ:strideᵢ:Nx
         # for j = indexⱼ:strideⱼ:Nx
-        tmp⁺ = 0;
-        tmp⁻ = 0;
+        tmp⁺ = 0.0f0;
+        tmp⁻= 0.0f0;
         while global_index <= Nx
-            tmp⁺ += F(xgpu[i, J] - xgpu[global_index, J])
-            tmp⁻ += F(xgpu[global_index, J] - xgpu[i, J])
+            d = xgpu[i, J] - xgpu[global_index, J]
+            tmp⁺ += F(d)
+            tmp⁻ += F(-d)
             global_index += blockDim().y
         end
 
