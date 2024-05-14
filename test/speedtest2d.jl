@@ -1,4 +1,4 @@
- include("kernels.jl")
+include("kernels.jl")
 
 # simple RELU
 function F(x::Float32)::Float32
@@ -10,41 +10,6 @@ function F(x::Float32)::Float32
         return 1.0f0
     end
 end
-
-function speedtestnaive(Nx, Nj)
-    x = rand(Float32, Nx, Nj)
-    d = zeros(Float32, Nx, Nj)
-
-    # weights
-    w = Float64.(rand(1:5, Nj))
-    w ./= sum(w)   
-
-    xgpu = CuArray(x)
-    Φ⁺gpu = CuArray(d)
-    Φ⁻gpu = CuArray(d)
-
-    kernel = @cuda launch=false pairwisecomparenaive(xgpu, Φ⁺gpu, Φ⁻gpu, Nj, Nx)
-
-    config = launch_configuration(kernel.fun)
-    println(config)
-    @time begin
-        CUDA.@sync begin
-            kernel(xgpu, Φ⁺gpu, Φ⁻gpu, Nj, Nx;
-            threads=config.threads, blocks=config.blocks)
-        end
-    end
-
-    Φ⁺ = Array(Φ⁺gpu);
-    Φ⁻ = Array(Φ⁻gpu);
-
-    return Φ⁺, Φ⁻
-
-end
-
-
-# Oregon is about 254806 km², so .5km² cells gives
-# Nx = number of alternatives
-# Nj = number of criteria
 
 function speedtest2D(Nx, Nj)
     x = rand(Float32, Nx, Nj)
@@ -84,4 +49,3 @@ function speedtest2D(Nx, Nj)
 end
 
 Φ⁺,Φ⁻ = speedtest2D(4 * (40000), 1);
-Φ⁺,Φ⁻ = speedtestnaive(4 * (254806) , 1);
