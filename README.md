@@ -6,7 +6,7 @@ The paper applies the PROMETHEE method of multi-criteria decision analysis (MCDA
 
 For background on PROMETHEE methods in MCDA see https://www.cin.ufpe.br/~if703/aulas/promethee.pdf
 
-The method takes as inputs a set of weightings given by decision makers (DM's) to each criteria and constructs a partial ordering of alternatives where $a\geq b$ if $a$ is at least as "preferable" to $b$. In our case the relation is $a$ is at least as at risk to floods as $b$. In the literature around this it seems this partial ordering is called _outranking_ and such methods _outranking methods_. The basic idea is the resulting partial ordering captures domain expert opinion on alternatives. From the partial ordering alternatives can be analyzed and ranked (ordered). 
+The method takes as inputs a set of weightings given by decision makers (DM's) to each criteria and constructs a partial ordering (https://en.wikipedia.org/wiki/Partially_ordered_set) of alternatives where $a\geq b$ if $a$ is at least as "preferable" to $b$. In our case an example of the relation is $a$ is at least as at risk to floods as $b$. In the literature around this it seems this partial ordering is called _outranking_ and such methods _outranking methods_. The basic idea is the resulting partial ordering captures domain expert opinion on alternatives. From the partial ordering alternatives can be analyzed and ranked (ordered). 
 
 It should be noted that such a partial ordering actually defines a directed graph on the alternatives.
 
@@ -20,7 +20,7 @@ The framework also can be used to define certain scores on each alternative, for
 - the set of criteria functions $g_j$ defined on the $x_k$
 - DM weightings of each criteria $w_j$ (where $\sum w_j = 1$)
 ### Parameters
-- Parametric preference functions $F_j:\mathbb R \to [0,1]$ for each criterion
+- Parametric preference functions $F_j:\mathbb R \to [0,1]$ for each criterion. Technically these are also set with DM input so that the function matches their "scale" on each criteria (see https://www.cin.ufpe.br/~if703/aulas/promethee.pdf)
 
 ### Algorithm
 Given the above, proceed as follows:
