@@ -83,5 +83,5 @@ function speedtest2D(Nx, Nj)
 
 end
 
-Φ⁺,Φ⁻ = speedtest2D(4 * (1000),30);
+Φ⁺,Φ⁻ = speedtest2D(4 * (2000),30);
 Φ⁺,Φ⁻ = speedtestnaive(254806 ,30);

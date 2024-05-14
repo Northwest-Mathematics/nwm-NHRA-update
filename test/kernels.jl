@@ -40,41 +40,50 @@ function pairwisecompare2D(xgpu, Φ⁺gpu, Φ⁻gpu, J, Nx, threadsⱼ)
     indexⱼ = (blockIdx().y - 1) * blockDim().y + threadIdx().y
     strideⱼ = gridDim().y * blockDim().y
 
-    S⁺ = CuStaticSharedArray(Float64, threadsⱼ)
-    S⁻ = CuStaticSharedArray(Float64, threadsⱼ)
-    local_id = threadIdx().y + 1
+    S⁺ = @cuDynamicSharedMem(Float64, threadsⱼ)
+    S⁻ = @cuDynamicSharedMem(Float64, threadsⱼ)
+    local_id = threadIdx().y
     
+    global_index = threadIdx().y
 
-    for i = indexᵢ:strideᵢ:Nx
+    # for i = indexᵢ:strideᵢ:Nx
         # for j = indexⱼ:strideⱼ:Nx
-        #     S⁺[local_id] = F(xgpu[i, J] - xgpu[j, J])
-        #     S⁻[local_id] = F(xgpu[j, J] - xgpu[i, J])
-        # end
+        tmp⁺ = 0;
+        tmp⁻ = 0;
+        while global_index <= Nx
+            tmp⁺ += F(xgpu[indexᵢ, J] - xgpu[global_index, J])
+            tmp⁻ += F(xgpu[global_index, J] - xgpu[indexᵢ, J])
+            global_index += blockDim().y
+        end
+
+        S⁺[local_id] = tmp⁺;
+        S⁻[local_id] = tmp⁻;
 
             sync_threads()
 
             stride = blockDim().y ÷ 2; 
-            # while stride > 0
+            while stride > 0
                 
-            #     @inbounds if threadIdx().y < stride
-            #         S⁺[local_id] = S⁺[local_id] + S⁺[local_id + stride];
-            #         S⁻[local_id] = S⁻[local_id] + S⁻[local_id + stride];
-            #     end
+                @inbounds if threadIdx().y < stride
+                    S⁺[local_id] = S⁺[local_id] + S⁺[local_id + stride];
+                    S⁻[local_id] = S⁻[local_id] + S⁻[local_id + stride];
+                end
 
-            #     sync_threads();
-            #     stride ÷=2
-            # end
+                sync_threads();
+                stride ÷=2
+            end
 
-            # if local_id == 1
-            #     CUDA.@atomic Φ⁺gpu[i, J] += S⁺[local_id]
-            #     CUDA.@atomic Φ⁻gpu[i, J] += S⁻[local_id]
-            # end
+            if local_id == 0
+                CUDA.@atomic Φ⁺gpu[i, J] = Φ⁺gpu[i, J] + S⁺[local_id]
+                CUDA.@atomic Φ⁻gpu[i, J] = Φ⁻gpu[i, J] + S⁻[local_id]
+            end
             
             # if thread_id < 32
             #     warpReduce(S⁺,local_id);
             #     warpReduce(S⁻,local_id);
             # end
-        Φ⁺gpu[i, J] /= (Nx - 1)
-        Φ⁻gpu[i, J] /= (Nx - 1)
-    end
+        Φ⁺gpu[indexᵢ, J] /= (Nx - 1)
+        Φ⁻gpu[indexᵢ, J] /= (Nx - 1)
+    # end
+    return nothing
 end
