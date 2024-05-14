@@ -1,16 +1,23 @@
 
-function pairwisecomparenaive(xgpu, dgpu, J, Nx)
+function pairwisecomparenaive(xgpu, Φ⁺gpu, Φ⁻gpu, Nj, Nx)
     index = (blockIdx().x - 1) * blockDim().x + threadIdx().x
     stride = gridDim().x * blockDim().x
 
     for i = index:stride:Nx
-        y = 0;
+        for J = 1:Nj
+            y⁺ = 0;
+            y⁻ = 0;
+            for j = 1:Nx
+                y⁺ += @views F(xgpu[i, J] - xgpu[j, J]);
+                y⁻ += @views F(xgpu[j, J] - xgpu[i, J]);
+            end
 
-        for j = 1:Nx
-            y += F(xgpu[i, J] - xgpu[j, J]);
+            y⁺ /= (Nx - 1);
+            y⁻ /= (Nx - 1);
+
+            Φ⁺gpu[i, J] = y⁺
+            Φ⁻gpu[i, J] = y⁻
         end
-
-        dgpu[i, J] = y / (Nx - 1);
     end
 
 end
@@ -35,24 +42,24 @@ function speedtestnaive(Nx, Nj)
     w ./= sum(w)   
 
     xgpu = CuArray(x)
-    dgpu = CuArray(d)
+    Φ⁺gpu = CuArray(d)
+    Φ⁻gpu = CuArray(d)
 
-    index = 1
-
-    kernel = @cuda launch=false pairwisecomparenaive(xgpu, dgpu, index, Nx)
+    kernel = @cuda launch=false pairwisecomparenaive(xgpu, Φ⁺gpu, Φ⁻gpu, Nj, Nx)
 
     config = launch_configuration(kernel.fun)
     println(config)
-    for crit = 1:Nj
+    @time begin
         CUDA.@sync begin
-            kernel(xgpu, dgpu, crit, Nx;
+            kernel(xgpu, Φ⁺gpu, Φ⁻gpu, Nj, Nx;
             threads=config.threads, blocks=config.blocks)
         end
     end
 
-    d = Array(dgpu);
+    Φ⁺ = Array(Φ⁺gpu);
+    Φ⁻ = Array(Φ⁻gpu);
 
-    return d
+    return Φ⁺, Φ⁻
 
 end
 
@@ -62,6 +69,4 @@ end
 Nx = 4 * (100000) # number of alternatives
 Nj = 30 # number of criteria
 
-@time begin
-    Φ⁺ = speedtestnaive(Nx,Nj)
-end
+Φ⁺,Φ⁻ = speedtestnaive(Nx,Nj)
