@@ -60,8 +60,8 @@ function speedtest2D(Nx, Nj)
 
     kernel = @cuda launch=false pairwisecompare2D(xgpu, Φ⁺gpu, Φ⁻gpu, 1, Nx, 16)
 
-    threadsᵢ = 32
-    threadsⱼ = 16
+    threadsᵢ = 16
+    threadsⱼ = 32
     threads = (threadsᵢ, threadsⱼ)
     blocks_i = cld(Nx, threadsᵢ)
     blocks_j = cld(Nx, threadsⱼ)
