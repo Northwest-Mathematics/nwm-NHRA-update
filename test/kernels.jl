@@ -73,8 +73,8 @@ function pairwisecompare2D(xgpu, Φ⁺gpu, Φ⁻gpu, J, Nx, threadsⱼ)
         end
 
         if local_id == 0
-            # CUDA.@atomic Φ⁺gpu[i, J] = Φ⁺gpu[i, J] + S⁺[local_id]
-            # CUDA.@atomic Φ⁻gpu[i, J] = Φ⁻gpu[i, J] + S⁻[local_id]
+            CUDA.@atomic Φ⁺gpu[i, J] = Φ⁺gpu[i, J] + S⁺[local_id]
+            CUDA.@atomic Φ⁻gpu[i, J] = Φ⁻gpu[i, J] + S⁻[local_id]
         end
         
         # if thread_id < 32
