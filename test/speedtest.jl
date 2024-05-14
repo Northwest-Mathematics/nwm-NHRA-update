@@ -8,8 +8,8 @@ function pairwisecomparenaive(xgpu, Φ⁺gpu, Φ⁻gpu, Nj, Nx)
             y⁺ = 0;
             y⁻ = 0;
             for j = 1:Nx
-                y⁺ += @views F(xgpu[i, J] - xgpu[j, J]);
-                y⁻ += @views F(xgpu[j, J] - xgpu[i, J]);
+                y⁺ += F(xgpu[i, J] - xgpu[j, J]);
+                y⁻ += F(xgpu[j, J] - xgpu[i, J]);
             end
 
             y⁺ /= (Nx - 1);
@@ -19,7 +19,6 @@ function pairwisecomparenaive(xgpu, Φ⁺gpu, Φ⁻gpu, Nj, Nx)
             Φ⁻gpu[i, J] = y⁻
         end
     end
-
 end
 
 # simple RELU
@@ -66,7 +65,7 @@ end
 
 
 # Oregon is about 254806 km², so .5km² cells gives
-Nx = 4 * (100000) # number of alternatives
+Nx = 4 * (40000) # number of alternatives
 Nj = 30 # number of criteria
 
-Φ⁺,Φ⁻ = speedtestnaive(Nx,Nj)
+Φ⁺,Φ⁻ = speedtestnaive(Nx,Nj);
