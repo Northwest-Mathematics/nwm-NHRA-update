@@ -1,5 +1,14 @@
+# To Do
+- copyrights
+- top level description of NWM and what this is
+- module and example function so they can test
+- timing results
+- discussion
+
 # nwm-NHRA-update
 Parallel implementation of SF-PROMETHEE method in https://www.tandfonline.com/doi/full/10.1080/09640568.2019.1599830
+
+more. Also mention copyright and license
 
 # Method Overview
 The paper applies the PROMETHEE method of multi-criteria decision analysis (MCDA) to raster data, where each grid cell is an alternative choice. In the context of the NHRA update https://www.oregon.gov/lcd/nh/pages/risk-assessment-upgrade.aspx the criteria for "choosing" an alternative are actually risk factors for e.g. floods, so the method in this case is choosing which alternatives are at most risk.
@@ -69,3 +78,11 @@ $$\Phi(x_i) = \sum_j w_j \Phi_j(x_i),$$
 which the authors say gives a useful way of visualizing the various scores for alternatives viewed as layered raster grids.
 
 # Implementation Details
+ ## computational complexity
+ ## DM inputs
+ - weights
+ - preference functions
+
+ # Discussion
+ - speed not a problem
+ - dm inputs, agnostic approach (uniform weighting and automatically scaled preference functions)
