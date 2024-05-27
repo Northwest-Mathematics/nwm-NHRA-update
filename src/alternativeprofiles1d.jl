@@ -31,7 +31,7 @@ function F(x::Float32)::Float32
     end
 end
 
-function speedtest1D(Nx, Nj)
+function alternativeprofiles1D(Nx, Nj)
     x = rand(Float32, Nx, Nj)
     d = zeros(Float32, Nx, Nj)
 
@@ -66,4 +66,4 @@ end
 # Nx = number of alternatives
 # Nj = number of criteria
 
-Φ⁺,Φ⁻ = speedtest1D(4 * (254806) , 30);
+# Φ⁺,Φ⁻ = alternativeprofiles1D(4 * (254806) , 30);

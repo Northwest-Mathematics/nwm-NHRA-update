@@ -18,15 +18,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-module ParSPROMETHEE
+include("..//src/ParS-PROMETHEE.jl");
 
-using CUDA, Random;
+using .ParSPROMETHEE;
 
-include("kernels.jl");
-include("alternativeprofiles1d.jl");
-include("alternativeprofiles2d.jl");
+# Oregon is about 254806 km², so .5km² cells gives
+# Nx = number of alternatives
+# Nj = number of criteria
 
-export alternativeprofiles1D;
+Nx = 4 * (1000);
+Nj = 30;
 
-
-end
+Φ⁺,Φ⁻ = alternativeprofiles1D(Nx, Nj);

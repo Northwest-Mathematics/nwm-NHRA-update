@@ -84,7 +84,7 @@ which the authors say gives a useful way of visualizing the various scores for a
  ## computational complexity
 The computational complexity of $\pi$ is $O(m^2)$ where as above $m$ is the number of alternatives $x_i$. This can be seen by recognizing $\pi$ as the adjacency of a complete graph on $m$ vertices, or verfied directly from the above formulas. Therefor the computatoinal complexity of $\Phi_j^+$ is $O(m^3)$, being the row sum of $\pi$ (and likewise for $\Phi_j^-$). 
 
-To cost of computing the full $\Phi = \sum_j w_j \Phi_j$$ is thus $O(n*m^3)$ where $n$ is the number of criteria. In other words, the computational complexity of the SF-Promethee method is _linear_ in the number of criteria, but _polynomial_ in the number of alternatives. This clearly makes a naive implementation infeasible for moderately large numbers of alternatives.
+To cost of computing the full $\Phi = \sum_j w_j \Phi_j$ is thus $O(n*m^3)$ where $n$ is the number of criteria. In other words, the computational complexity of the SF-Promethee method is _linear_ in the number of criteria, but _polynomial_ in the number of alternatives. This clearly makes a naive implementation infeasible for moderately large numbers of alternatives.
 
 However, the computation over the alternatives can be carried out _in parallel_, thus making it tractable. We implement here a simple parallel computation on an Nvidia A5500 laptop gpu where we parallelize over the alternatives $x_i$ in the outer loop of a double loop to compute the sum $\Phi_j^+$ in place (see the kernel `pairwisecompare1D`).
 

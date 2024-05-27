@@ -31,7 +31,7 @@ function F(x::Float32)::Float32
     end
 end
 
-function speedtest2D(Nx, Nj)
+function alternativeprofiles2D(Nx, Nj)
     x = rand(Float32, Nx, Nj)
     d = zeros(Float32, Nx, Nj)
 
@@ -68,4 +68,4 @@ function speedtest2D(Nx, Nj)
 
 end
 
-Φ⁺,Φ⁻ = speedtest2D(4 * (40000), 1);
+# Φ⁺,Φ⁻ = alternativeprofiles2D(4 * (40000), 1);
