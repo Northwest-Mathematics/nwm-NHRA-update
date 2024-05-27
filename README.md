@@ -8,7 +8,7 @@ The purpose is to explore the computational complexity and other possible issues
 2. https://www.cin.ufpe.br/~if703/aulas/promethee.pdf
 
 # How To Run
-Set `Nx` and `Nj` in `speedtest.jl` and run the file. Timing will be output to console and measures GPU computation time only (the rest is either one-time cost or neglible.) 
+Set `Nx` and `Nj` in `speedtest.jl` and run the file. Timing will be output to console and measures GPU computation time only (the rest is either one-time cost or neglible.). Timing will vary depending on GPU, but CUDA is required. 
 
 # Method Overview
 The paper applies the PROMETHEE method of multi-criteria decision analysis (MCDA) to raster data, where each grid cell is an alternative choice. In the context of the NHRA update https://www.oregon.gov/lcd/nh/pages/risk-assessment-upgrade.aspx the criteria for "choosing" an alternative are actually risk factors for e.g. floods, so the method in this case is choosing which alternatives are at most risk.
