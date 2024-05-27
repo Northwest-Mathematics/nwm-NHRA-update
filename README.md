@@ -7,6 +7,9 @@ The purpose is to explore the computational complexity and other possible issues
 1. https://www.tandfonline.com/doi/full/10.1080/09640568.2019.1599830
 2. https://www.cin.ufpe.br/~if703/aulas/promethee.pdf
 
+# How To Run
+Set `Nx` and `Nj` in `speedtest.jl` and run the file. Timing will be output to console and measures GPU computation time only (the rest is either one-time cost or neglible.) 
+
 # Method Overview
 The paper applies the PROMETHEE method of multi-criteria decision analysis (MCDA) to raster data, where each grid cell is an alternative choice. In the context of the NHRA update https://www.oregon.gov/lcd/nh/pages/risk-assessment-upgrade.aspx the criteria for "choosing" an alternative are actually risk factors for e.g. floods, so the method in this case is choosing which alternatives are at most risk.
 
@@ -89,7 +92,7 @@ We use synthetic data generated as stanard normal random variables, and a simple
  ## Runtime
  Oregon is about 254806 km², so as pretty strong test let us assume we have raster data with .5km² cells covering all of Oregon. This would give us $m=4\cdot 254,806 = 1,019,224$ alternatives. 
 
-We find that with this $m$ the computation of $\Phi_j^+$ and $\Phi_j^-$ together take about $4$ seconds per criteria (see `speedtest1D`), so e.g. one criteria takes about $4$ seconds, $30$ criteria takes about $120$ seconds, etc. Given it seems unlikely that the resolution of actual data being used in the NHRA will be much smaller than this, the simple paralelization given here should be sufficient to carry out testing and implementation of the method.
+We find that with this $m$ the computation of $\Phi_j^+$ and $\Phi_j^-$ together take about $4$ seconds per criteria, so e.g. one criteria takes about $4$ seconds, $30$ criteria takes about $120$ seconds, etc. Given it seems unlikely that the resolution of actual data being used in the NHRA will be much smaller than this, the simple paralelization given here should be sufficient to carry out testing and implementation of the method.
 
 ## Fuzzy numbers
 In ref [1] the authors state that "To reduce computational complexity, the application of PROMETHEE fuzzy extensions is proposed," and, the authors claim, "the approach significantly reduces the computational load needed for the typical version of the PROMETHEE method." In other words, the reason for inclusion of fuzzy numbers in their algorithm is "due to computational limitations that arise from the need to perform pairwise comparisons for every cell (pixel) in the examined area" Moreover, the use of fuzzy numbers in the method results in information loss ("defuzzification approach implementation causes loss of information") as the fuzzy numbers are essentially arithmetic averages, and at the end sharp, "defuzzified" numbers are output.
