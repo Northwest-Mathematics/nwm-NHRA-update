@@ -1,9 +1,3 @@
-# To Do
-- top level description of NWM and what this is
-- module and example function so they can test
-- timing results
-- discussion
-
 # nwm-NHRA-update
 This repository contains documentation and code for a prototype implementation of the SF-PROMETHEE method in https://www.tandfonline.com/doi/full/10.1080/09640568.2019.1599830 being used in the Natural Hazards Risk Assessment (NHRA) upgrade by the DLCD (https://www.oregon.gov/lcd/nh/pages/risk-assessment-upgrade.aspx), contributed by Northwest Mathematics (www.northwestmath.com). 
 
