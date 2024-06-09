@@ -113,3 +113,9 @@ We decided to not use any fuzzy numbers, since the above shows that some straigh
  ## Data quality
 The method in ref [1] appears to make no allowances for missing data, but assinging weights to criteria with more poorly sampled data may be one way to account for this. Alternatively, it may be possible to extend the above method to take noise into account and thus somehow incorporate measurement error or other uncertainty about the data into account, but this would require further investigation.
 
+# Suggested Approach for Hazard Assessment
+In order to apply this algorithm to the the ranking of multiple hazards as planned in the NHRA upgrade, one can proceed as follows:
+1. For each hazard $H_1$, $H_2,...$ $H_K$ compute the type 2 complete ranking $\Phi^{H_i}$ using the criteria (indicators) for that hazard $g^{H_i}_j$. The output will be $K$ complete rankings of alternatives, one per hazard.
+    - This involves choosing weightings for the indicators as above, e.g. uniform or depending on data.
+2. Run the method again using the $K$ rankings $\Phi^{H_i}$ as the criteria to compute a final type 2 ranking $\Phi$ that will compare all the hazards using the rankings computed in step 1. So in the above notation we have $g_j=\Phi^{H_j}$. In particular, each alternative profile $\Phi_j$ for the final ranking $\Phi$ will correspond to an individual hazard, $H_j$.
+    - To choose the weights for each hazard, one can again rely on expert opinion, leave them uniform, or do something data driven such as compute an expected cost in dollars for each hazard occurance or do an estimate of the frequency of occurance. For example, perhaps in OR floods end up costing less to recover from than fires, and earthquakes may be far less likely than either fires or floods.
