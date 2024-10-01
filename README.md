@@ -22,7 +22,7 @@ It should be noted that such a partial ordering actually defines a directed grap
 The framework also can be used to define certain scores on each alternative, for each criteria, essentially through summing edge weights in the above graph.
 
 # Algorithm
-
+(note: in order for math to render properly this is best viewed in VS Code or another editor, not on Github website)
 
 ### Inputs
 - the set of alternatives (raster cells) $x_k$
